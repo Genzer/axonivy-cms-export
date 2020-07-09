@@ -1,0 +1,25 @@
+repos: #The order matters, we want prospector to run after all the sorting was done
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+  - repo: git://github.com/FalconSocial/pre-commit-python-sorter
+    rev: b57843b0b874df1d16eb0bef00b868792cb245c2 # d044ff27300a6dc8b1a56cd22552e3a810dc6f49 <- gives an error saying that1.0.4 release, sha instead of version to prevent the repository changing
+    hooks:
+    - id: python-import-sorter
+      args: ['--silent-overwrite']
+  - repo: https://github.com/ambv/black
+    rev: 026c81b83454f176a9f9253cbfb70be2c159d822 # stable as of march 15th (version 19.3b0)
+    hooks:
+    - id: black
+      # language_version: python3.6 # we are using a virtual environment, this might mess it up
+      # args: ['--check']
+  - repo: local
+  # https://github.com/pre-commit/pre-commit/issues/178
+    hooks:
+    - id: prospector
+      name: prospector
+      language: system
+      entry: "prospector"
+      types: [python]

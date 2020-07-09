@@ -1,0 +1,66 @@
+# output-format: grouped
+output-format: pylint
+
+strictness: high
+
+# allow pylint to search for members inspecting modules that are imported, etc... it will miss those generated dynamically, it might be ok to disable this if it becomes too verbose.
+member-warnings: true
+doc-warnings: false
+test-warnings: true
+max-line-length: 125
+
+ignore-paths:
+  - docs/
+
+# uses:
+#   - flask
+# If we are using flask, activating this will remove a ton of false posotives.
+
+# This would check for setuptools and setup.py to check that the description of the project, etc work well
+# pyroma:
+#   run: true
+
+pylint:
+  disable:
+    - too-few-public-methods
+    - missing-docstring
+    - star-args
+    - trailing-newlines
+    - invalid-name
+    - wrong-import-order # Fixed on our hook
+    - ungrouped-imports # Fixed result by our hook
+  options:
+    const-rgx: "[A-Z_]+|app$"
+    good-names: ["i", "j", "k", "ex", "Run", "_", "T", "V"]
+    init-import: "no" # disable unused import errors on __init__.py
+    # extension-pkg-whitelist: ["cv2"] # if you use opencv, you need to whiltelist cv2, so that it cna introspect it.
+    # ignored-classes:["optparse.Values","thread._local","_thread._local"] #c lasses from which to ignore members
+    # ignored-modules:[] # module names for which member attributes should not be checked (mainly dynamically generated ones)
+
+# Complexity algorithm
+mccabe:
+  run: true
+# frosted:
+#   run: false
+mypy:
+  run: false
+
+# detects simple syntax errors within a file, sometimes other tools seem to miss these simple things
+pyflakes:
+  run: true
+  disable:
+    - F401 # module import but unused (pylint deals with this)
+
+pep8:
+  run: false
+
+pep257:
+  run: false
+  # disable:
+  #   - D100 # docstring in public moduel
+  #   - D101 # docstring in public class
+  #   - D102 # docstring in public method
+  #   - D103
+  #   - D205
+  #   - D400
+  #   - D401
