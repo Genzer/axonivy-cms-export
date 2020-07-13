@@ -16,12 +16,12 @@ class ContentType(Enum):
     """
     STRING = 'E6AFEA2034301F66'
     TEXT = 'E6AFEA202AFB4911'
-    PLAIN_TEXT = 'E6AFEA1FBC44F7F7'
+    #  PLAIN_TEXT = 'E6AFEA1FBC44F7F7'
     FOLDER = 'E6AFEA2049948BDF'
     
     @staticmethod
     def textual_types() -> Set['ContentType']:
-        return {ContentType.STRING, ContentType.TEXT, ContentType.PLAIN_TEXT} 
+        return {ContentType.STRING, ContentType.TEXT} 
 
 @dataclass
 class ContentObjectValue:
@@ -65,7 +65,8 @@ def create_value_content_object(root_cms: Path, co_meta: Path) -> ContentObject:
                 defined_fields = __parse_fields(raw_properties, returns_only=__fieldnames(ContentObject))
 
                 if defined_fields.get('typeguid') not in {c.value for c in ContentType.textual_types()}:
-                    raise RuntimeError(f"{co_meta} is not a textual value type")
+                    print(f"[warn] {co_meta} is not a textual value type")
+                    return None
 
                 fields = { 
                     **defined_fields,

@@ -16,7 +16,9 @@ def collect_all(root: Path) -> Generator[ContentObject, None, None]:
         if len(sub_dirs) == 0:
             if 'co.meta' in files and any(file for file in files if file.endswith(".data")):
                 co_meta = Path(current) / 'co.meta'
-                yield create_value_content_object(root_cms, co_meta)
+                content_object = create_value_content_object(root_cms, co_meta)
+                if content_object:
+                    yield content_object
 
 def to_dict_table(content_objects: Generator[ContentObject, None, None]) -> List[Dict[str, str]]:
     entries: List[Dict[str, str]] = []
