@@ -1,0 +1,2 @@
+co: name={textWithNonExistingValue} description={} changed={2019-06-03 09:40:09 CEST} changedby={User} visualorder={0} guid={16A42B303BAEF986} parentguid={} typeguid={E6AFEA2034301F66} id={} parentid={} typeid={}
+val: guid={16A42B860D360ED5} datatype={} isdefault={false} langid={en} description={} validfrom={2019-04-22 03:42:40 CEST} validto={} changed={2019-04-22 03:45:40 CEST} changedby={developer} properties={} id={}

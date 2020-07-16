@@ -14,7 +14,7 @@ def collect_all(root: Path) -> Generator[ContentObject, None, None]:
     root_cms = Path(root) / 'cms'
     for current, sub_dirs, files in walk(root_cms):
         if len(sub_dirs) == 0:
-            if 'co.meta' in files and any(file for file in files if file.endswith(".data")):
+            if 'co.meta' in files:
                 co_meta = Path(current) / 'co.meta'
                 content_object = create_value_content_object(root_cms, co_meta)
                 if content_object:

@@ -64,8 +64,9 @@ def create_value_content_object(root_cms: Path, co_meta: Path) -> ContentObject:
                 raw_properties = line.replace("co: ", "")
                 defined_fields = __parse_fields(raw_properties, returns_only=__fieldnames(ContentObject))
 
-                if defined_fields.get('typeguid') not in {c.value for c in ContentType.textual_types()}:
-                    print(f"[warn] {co_meta} is not a textual value type")
+                all_supported_textual_types = {c.value for c in ContentType.textual_types()}
+                is_textual_type = defined_fields.get('typeguid') in all_supported_textual_types
+                if not is_textual_type:
                     return None
 
                 fields = { 
@@ -83,14 +84,21 @@ def create_value_content_object(root_cms: Path, co_meta: Path) -> ContentObject:
                 defined_fields = __parse_fields(raw_values, returns_only={'guid', 'langid'})
                 value_path = co_meta.parent / (defined_fields['guid'] + '.data')
                 raw_content = ''
-                with open(value_path, 'r', encoding='utf8') as value_file:
-                    raw_content = value_file.read()
+
+                if value_path.exists():
+                    with open(value_path, 'r', encoding='utf8') as value_file:
+                        raw_content = value_file.read()
+                        # This copes with situation that most of the time, the export is created
+                        # on Windows whereas the line separator is always CRLF.
+                        # Importing an export created on Linux (only LF) cause unnecessary updates.
+                        raw_content = raw_content.replace('\r\n', '\n').replace('\n', '\r\n')
 
                 more_fields = {
                     'raw_content' : raw_content,
                     'path' : value_path,
                 }
                 content_object_values.append(ContentObjectValue(**defined_fields, **more_fields)) 
+
         values = {
             'values' : dict({ v.langid : v for v in content_object_values })
         }
